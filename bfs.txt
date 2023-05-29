@@ -2,7 +2,7 @@
 #include<ctime>
 #include<queue>
 #include<omp.h>
-using namespace std:
+using namespace std;
 class Treenode {
 public:
 int val;
@@ -55,13 +55,13 @@ if(node->right)
 
 int main() {
 //construct Tree
-Treenode * tree =new treenode(1);
-tree->left = new treenode(2);
-tree->right = new treenode(3);
-tree->left->left = new treenode(4);
-tree->left->right = new treenode(5);
-tree->right->left = new treenode(6);
-tree -> right -> right = new treenode(7);
+Treenode * tree =new Treenode(1);
+tree->left = new Treenode(2);
+tree->right = new Treenode(3);
+tree->left->left = new Treenode(4);
+tree->left->right = new Treenode(5);
+tree->right->left = new Treenode(6);
+tree -> right -> right = new Treenode(7);
 
 cout<<"Sequential";
 clock_t seqStartTime = clock();
