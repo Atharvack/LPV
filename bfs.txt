@@ -1,0 +1,80 @@
+#include<iostream>
+#include<ctime>
+#include<queue>
+#include<omp.h>
+using namespace std:
+class Treenode {
+public:
+int val;
+int Treenode* left;
+int Treenode* right;
+Treenode(int x){
+val = x;
+left = nullptr;
+right = nullptr;
+}
+
+};
+void Sequentialbfs(Treenode* root){
+queue<Treenode*> q;
+q.push(root);
+while(!q.empty()){
+Treenode* node = q.front();
+cout<<node -> val<<" ";
+q.pop();
+if(node->left)
+	q.push(node->left);
+if(node->right)
+	q.push(node->right);
+}
+};
+
+void Parallelbfs(Treenode* root){
+queue<Treenode*> q;
+q.push(root);
+while(!q.empty()){
+int qs = q.size();
+
+#pragma omp parallel for
+for(int i = 0;i<qs;++i){
+Treenode* node;
+#pragma omp critical
+{ node = q.front();
+q.pop()}
+cout<<node->val<<" ";
+#pragma omp critical
+{
+if(node->left)
+	q.push(node->left);
+if(node->right)
+	q.push(node->right);
+}
+}
+}
+}
+
+int main() {
+//construct Tree
+Treenode * tree =new treenode(1);
+tree->left = new treenode(2);
+tree->right = new treenode(3);
+tree->left->left = new treenode(4);
+tree->left->right = new treenode(5);
+tree->right->left = new treenode(6);
+tree -> right -> right = new treenode(7);
+
+cout<<"Sequential";
+clock_t seqStartTime = clock();
+Sequentialbfs(tree);
+clock_t seqEndTime = clock();
+double seqDuration = ( seqEndTime - seqStartTime)*1000000.0/(CLOCKS_PER_SEC);
+cout<<seqDuration<<endl;
+
+cout<<"Parallel";
+clock_t parStartTime = clock();
+Parallelbfs(tree);
+clock_t parEndTime = clock();
+double ParDuration = ( parEndTime -parStartTime)*1000000.0 / (CLOCKS_PER_SEC);
+cout<<ParDuration<<endl;
+return 0;
+}
